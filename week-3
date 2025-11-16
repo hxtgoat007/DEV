@@ -1,0 +1,132 @@
+from google.colab import drive
+drive.mount('/content/drive')
+_______
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import re
+_______
+
+df=pd.read_csv('/content/drive/My Drive/Data Exploration CSV (1-5)/Child Labour in India Exp-4.csv')
+df
+_______
+
+df.shape
+_______
+
+df.columns
+_______
+
+df.dtypes
+_______
+
+df.info()
+_______
+
+df.describe()
+________
+
+df.head()
+df.tail()
+print("\nMissing values before cleanup:\n", df.isnull().sum())
+________
+
+# Cleaning function
+def clean_dataset(df):
+    # Remove duplicates
+    df = df.drop_duplicates()
+
+    # Missing values before cleanup
+    print("\nMissing values before cleanup:\n", df.isnull().sum())
+
+    # Remove extra spaces and line breaks (for text columns)
+    for col in df.select_dtypes(include=['object']).columns:
+        df[col] = df[col].map(lambda x: x.strip() if isinstance(x, str) else x)
+        df[col] = df[col].map(lambda x: re.sub(r'\s+', ' ', x) if isinstance(x, str) else x)
+
+    # Remove unwanted special characters but keep %, ., &, and -
+    for col in df.select_dtypes(include=['object']).columns:
+        df[col] = df[col].map(lambda x: re.sub(r"[^a-zA-Z0-9%.\-&\s]", "", x) if isinstance(x, str) else x)
+
+    # Fill missing numeric values with 0
+    num_cols = df.select_dtypes(include=['float64', 'int64']).columns
+    df[num_cols] = df[num_cols].fillna(0)
+
+    # Fill missing text values with 'Unknown'
+    text_cols = df.select_dtypes(include=['object']).columns
+    df[text_cols] = df[text_cols].fillna('Unknown')
+
+    return df
+___________
+
+# Clean the child labour dataset
+cleaned_df = clean_dataset(df)
+
+# Save cleaned file
+cleaned_df.to_csv("Cleaned_Child_Labour.csv", index=False)
+
+print("\nCleaned dataset saved as Cleaned_Child_Labour.csv")
+__________
+
+for i, col in enumerate(df.columns):
+    print(f"{i}: {repr(col)}")
+_________
+
+df['States'].value_counts().plot()
+_________
+
+df['States'].value_counts().plot(kind='bar')
+__________
+
+df=pd.read_csv('/content/Cleaned_Child_Labour.csv')
+__________
+
+#### Child Marriage
+
+__________
+
+import pandas as pd
+import re
+import matplotlib.pyplot as plt
+__________
+
+df=pd.read_csv('/content/drive/My Drive/Data Exploration CSV (1-5)/child_marriage_india_sample (1).csv')
+df
+_________
+
+print("Child Marriage Dataset - Duplicates:", df.duplicated().sum())
+print("Child Marriage Dataset - Missing values:\n", df.isnull().sum())
+__________
+
+def clean_dataset(df):
+    # Remove duplicates
+    df = df.drop_duplicates()
+
+    # Clean string columns
+    for col in df.select_dtypes(include=['object']).columns:
+        df[col] = df[col].map(lambda x: x.strip() if isinstance(x, str) else x)
+        df[col] = df[col].map(lambda x: re.sub(r'\s+', ' ', x) if isinstance(x, str) else x)
+        df[col] = df[col].map(lambda x: re.sub(r"[^a-zA-Z0-9%.\-&\s]", "", x) if isinstance(x, str) else x)
+
+    # Fill missing numeric values with 0
+    num_cols = df.select_dtypes(include=['float64', 'int64']).columns
+    df[num_cols] = df[num_cols].fillna(0)
+
+    # Fill missing text values with 'Unknown'
+    text_cols = df.select_dtypes(include=['object']).columns
+    df[text_cols] = df[text_cols].fillna('Unknown')
+
+    return df
+___________
+
+df_clean = clean_dataset(df)
+___________
+
+plt.figure(figsize=(10,6))
+plt.bar(df_clean['State'], df_clean['Child_Marriage_Percentage'], color='salmon')
+plt.title('Child Marriage Percentage by State')
+plt.xlabel('State')
+plt.ylabel('Percentage')
+plt.xticks(rotation=75)
+plt.tight_layout()
+plt.show()
