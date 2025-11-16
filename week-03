@@ -27,7 +27,11 @@ df.describe()
 ________
 
 df.head()
+________
+
 df.tail()
+________
+
 print("\nMissing values before cleanup:\n", df.isnull().sum())
 ________
 
