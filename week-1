@@ -1,0 +1,98 @@
+import pandas as pd
+import numpy as np
+import seaborn as sbn
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+_______
+
+# Step 1: Load data
+data = {
+    'Name': ['joe', 'devi', 'asha', 'Shinku', 'Rahul'],
+    'Age': [18, 20, 19, 22, 25],
+    'Salary': [25000, 30000, 35000, 45000, 40000],
+    'Height': [165, 170, 180, 160, 175]
+}
+df = pd.DataFrame(data)
+print("Original DataFrame:\n", df)
+_______
+
+print("\nData Info:")
+print(df.info())
+
+print("\nDescriptive Statistics:")
+print(df.describe())
+________
+
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+print("\nDuplicate Rows:", df.duplicated().sum())
+________
+
+Q1 = df[['Age', 'Salary', 'Height']].quantile(0.25)
+Q3 = df[['Age', 'Salary', 'Height']].quantile(0.75)
+IQR = Q3 - Q1
+
+outliers = ((df[['Age', 'Salary', 'Height']] < (Q1 - 1.5 * IQR)) |
+            (df[['Age', 'Salary', 'Height']] > (Q3 + 1.5 * IQR)))
+
+print("\nOutliers Detected:")
+print(outliers)
+________
+
+#outliear
+sbn.boxplot(df['Salary'])
+________
+
+#outliear
+sbn.boxplot(df['Age'])
+________
+
+#outliear
+sbn.boxplot(df['Height'])
+________
+
+df_normalized = df.copy()
+cols = ['Age', 'Salary', 'Height']
+df_normalized[cols] = (df[cols] - df[cols].min()) / (df[cols].max() - df[cols].min())
+
+print("\nNormalized DataFrame:")
+print(df_normalized)
+________
+
+for col in cols:
+    plt.figure(figsize=(6, 4))
+    plt.plot(df[col], label='Original ' + col, marker='o')
+    plt.plot(df_normalized[col], label='Normalized ' + col, marker='x')
+    plt.title(f'Original vs Normalized values: {col}')
+    plt.xlabel('Index')
+    plt.ylabel(col)
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+________
+
+df_standardized = df.copy()
+df_standardized[cols] = (df[cols] - df[cols].mean()) / df[cols].std()
+
+print("\nStandardized DataFrame:")
+print(df_standardized)
+________
+
+for col in cols:
+    plt.figure(figsize=(6,4))
+    plt.plot(df[col], label='Original ' + col, marker='o')
+    plt.plot(df_standardized[col], label='Standardized ' + col, marker='x')
+    plt.title(f'Original vs Standardized Values: {col}')
+    plt.xlabel('Index')
+    plt.ylabel(col)
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+_________
+
+scaler_minmax = MinMaxScaler()
+scaler_std = StandardScaler()
+
+df[['Age_Norm', 'Salary_Norm', 'Height_Norm']] = scaler_minmax.fit_transform(df[['Age', 'Salary', 'Height']])
+df[['Age_Std', 'Salary_Std', 'Height_Std']] = scaler_std.fit_transform(df[['Age', 'Salary', 'Height']])
