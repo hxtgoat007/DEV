@@ -1,0 +1,95 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+________
+
+df=pd.read_csv('/content/Child Labour in India Exp-4.csv')
+_________
+
+df['Category'] = df['Category of States'].replace(['Non Special Category states', 'Special Category States'],['Non Special', 'Special'])
+_________
+
+df['Category']
+__________
+
+df['Category']=='Special'
+___________
+
+df[df['Category']=='Special']
+___________
+
+len(df[df['Category']=='Special'])
+___________
+
+len(df[df['Category']=='Non Special'])
+__________
+
+df['Manufacturing'] =df['Manufacturing'].replace('9. 9', '9.9')
+df['Manufacturing'] = df['Manufacturing'].astype('float')
+__________
+
+states = ['Delhi', 'UP', 'Bihar', 'MP']
+child_labour = [20, 45, 30, 25]
+
+plt.bar(states, child_labour, color='skyblue')
+plt.title("Child Labour Cases by State")
+plt.xlabel("States")
+plt.ylabel("Number of Cases")
+plt.show()
+__________
+
+#Stacked Bar Graph
+agriculture = [10, 20, 15, 10]
+manufacturing = [5, 10, 8, 12]
+
+plt.bar(states, agriculture, label='Agriculture', color='green')
+plt.bar(states, manufacturing, bottom=agriculture, label='Manufacturing', color='orange')
+
+plt.title("Child Labour by Sector")
+plt.xlabel("States")
+plt.ylabel("Number of Cases")
+plt.legend()
+plt.show()
+___________
+
+#Histrogram
+ages = [12, 13, 14, 15, 12, 16, 15, 14, 13, 12, 17, 16, 14, 15]
+
+plt.hist(ages, bins=5, color='blue', edgecolor='black')
+plt.title("Distribution of Child Labourers by Age")
+plt.xlabel("Age")
+plt.ylabel("Frequency")
+plt.show()
+__________
+
+#Pie Chart
+sectors = ['Agriculture', 'Manufacturing', 'Services']
+values = [40, 30, 30]
+
+plt.pie(values, labels=sectors, autopct='%1.1f%%', colors=['green','orange','blue'])
+plt.title("Child Labour Distribution by Sector")
+plt.show()
+__________
+
+#Line Chart
+years = [2015, 2016, 2017, 2018, 2019]
+cases = [50, 45, 40, 35, 30]
+
+plt.plot(years, cases, marker='o', linestyle='--', color='red')
+plt.title("Child Labour Cases Over Years")
+plt.xlabel("Year")
+plt.ylabel("Cases")
+plt.show()
+__________
+
+#scatter Plot
+import matplotlib.pyplot as plt
+
+plt.scatter(df['Agriculture'], df['Manufacturing'])
+
+plt.title("Child Labour: Agriculture vs Manufacturing")
+plt.xlabel("Agriculture")
+plt.ylabel("Manufacturing")
+
+plt.show()
