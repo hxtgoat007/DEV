@@ -29,6 +29,7 @@ df['Manufacturing'] =df['Manufacturing'].replace('9. 9', '9.9')
 df['Manufacturing'] = df['Manufacturing'].astype('float')
 __________
 
+#Bar Graph
 states = ['Delhi', 'UP', 'Bihar', 'MP']
 child_labour = [20, 45, 30, 25]
 
