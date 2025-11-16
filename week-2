@@ -1,0 +1,35 @@
+from nltk.tokenize import RegexpTokenizer
+from nltk.probability import FreqDist
+!pip install pdfminer.six
+from pdfminer.high_level import extract_text
+__________
+
+#extract the text from pdf file
+text=extract_text('')
+
+print(text)
+___________
+
+#create an instance of tokenizer using NLTK RegexpTokenizer
+tokenizer=RegexpTokenizer(r'\w+')
+
+#Tokenize the text read from PDF File
+tokens=tokenizer.tokenize(text)
+
+print(tokens)
+____________
+
+#find the frequency distribution
+freqdist=FreqDist(tokens)
+
+print(freqdist)
+____________
+
+#find words whose length is greater then 5 and frequency is greater then 20
+long_freq_words=[words for words in tokens if len(words)>5 and freqdist[words]>7]
+
+print(long_freq_words)
+_____________
+
+#Represent in Graph
+FreqDist(long_freq_words).plot()
