@@ -1,0 +1,40 @@
+import requests
+import matplotlib.pyplot as plt
+_________
+
+response=requests.get("https://en.wikipedia.org/robots.txt")
+__________
+
+if response.status_code==200:
+    test=response.text
+_________
+
+print(test)
+_________
+
+# Fetch robots.txt
+url = "https://en.wikipedia.org/robots.txt"
+response = requests.get(url)
+
+if response.status_code == 200:
+    lines = response.text.split('\n')
+
+    allow_count = 0
+    disallow_count = 0
+
+    for line in lines:
+        if line.startswith("Allow:"):
+            allow_count += 1
+        elif line.startswith("Disallow:"):
+            disallow_count += 1
+
+    # Plot pie chart
+    labels = ['Allow', 'Disallow']
+    sizes = [allow_count, disallow_count]
+    colors = ['green', 'red']
+
+    plt.figure(figsize=(6,6))
+    plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
+    plt.title("Allow vs Disallow in Wikipedia robots.txt")
+    plt.axis('equal')
+    plt.show()
